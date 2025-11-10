@@ -16,7 +16,6 @@
       <input *ngIf="editMode" [(ngModel)]="user.lastName" />
     </li>
   </ul>
-  <!-- Edit-Mode -->
   <div *ngIf="editMode" class="edit-actions">
     <button (click)="saveUser()">Speichern</button>
     <button (click)="cancelEdit()">Abbrechen</button>

@@ -30,7 +30,6 @@
     </table>
   </div>
 
-  <!-- Ein- / Auszahlungs-Formular -->
   <div *ngIf="showTransactionForm" class="transaction-card">
     <h3>
       {{ transactionType === 'deposit' ? 'Einzahlen' : 'Auszahlen' }}
@@ -48,7 +47,6 @@
     </div>
   </div>
 
-  <!-- Überweisungs-Formular -->
   <div *ngIf="showTransferForm" class="transaction-card">
     <h3>Zielkonto-Nummer -- Betrag</h3>
     <input

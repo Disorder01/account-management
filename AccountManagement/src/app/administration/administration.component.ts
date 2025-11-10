@@ -1,5 +1,3 @@
-// src/app/components/administration/administration.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { Account } from '../../models/account';
 import { AuthService } from '../AuthService';
@@ -71,7 +69,6 @@ export class AdministrationComponent implements OnInit {
   confirmTransaction() {
     const { accountBalance = 0, overdraftLimit = 0, accountType } = this.selectedAccount;
 
-    // Nur bei Girokonten Überziehungscheck
     if (
       accountType === AccountType.Giro &&
       !this.txService.checkAccountBalance(
@@ -122,7 +119,6 @@ export class AdministrationComponent implements OnInit {
   confirmTransfer() {
     const { accountBalance = 0, overdraftLimit = 0 } = this.selectedAccount;
 
-    // Überziehungs-Check für Quellkonto
     if (
       !this.txService.checkAccountBalance(
         accountBalance,
@@ -144,14 +140,12 @@ export class AdministrationComponent implements OnInit {
       .subscribe({
         next: res => {
           if (res.success) {
-            // Quellkonto aktualisieren
             const srcIdx = this.accounts.findIndex(
               a => a.accountNumber === res.sourceAccount.accountNumber
             );
             if (srcIdx > -1) {
               this.accounts[srcIdx].accountBalance = res.sourceAccount.accountBalance;
             }
-            // Zielkonto aktualisieren oder anhängen
             const tgtIdx = this.accounts.findIndex(
               a => a.accountNumber === res.targetAccount.accountNumber
             );

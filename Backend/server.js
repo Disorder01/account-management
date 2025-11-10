@@ -8,10 +8,9 @@ const User = require('./models/user');
 const app = express();
 const PORT = 3000;
 
-app.use(cors());               // CORS für alle Anfragen zulassen
-app.use(bodyParser.json());    // JSON-Body parsen
+app.use(cors());               
+app.use(bodyParser.json());    
 
-// nächste User-ID aus users.csv ermitteln
 function getNextUserId(filePath) {
   if (!fs.existsSync(filePath)) return 1;
   const lines = fs.readFileSync(filePath, 'utf-8')
@@ -25,7 +24,6 @@ function getNextUserId(filePath) {
   return maxId + 1;
 }
 
-// Registrierung neuer Nutzer
 app.post('/api/register', (req, res) => {
   const filePath = path.join(__dirname, 'database', 'users.csv');
   const newId = getNextUserId(filePath);
@@ -41,7 +39,6 @@ app.post('/api/register', (req, res) => {
   res.json({ success: true, user });
 });
 
-// Login anhand Nachname und Passwort
 app.post('/api/login', (req, res) => {
   const filePath = path.join(__dirname, 'database', 'users.csv');
   const { lastName, password } = req.body;
@@ -67,7 +64,6 @@ app.post('/api/login', (req, res) => {
   res.json({ success: false });
 });
 
-// nächste Konto-Nummer aus accounts.csv ermitteln
 function getNextAccountId(filePath) {
   if (!fs.existsSync(filePath)) return 1;
   const lines = fs.readFileSync(filePath, 'utf-8')
@@ -81,7 +77,6 @@ function getNextAccountId(filePath) {
   return max + 1;
 }
 
-// neues Konto anlegen und in CSV speichern
 app.post('/api/accounts', (req, res) => {
   const filePath = path.join(__dirname, 'database', 'accounts.csv');
   const acct = req.body;
@@ -110,7 +105,7 @@ app.listen(PORT, () => {
   console.log(`Server läuft auf http://localhost:${PORT}`);
 });
 
-  // Kunden-ID
+  // Customer-ID
 app.get('/api/accounts/:customerId', (req, res) => {
   const filePath = path.join(__dirname, 'database', 'accounts.csv');
   const customerId = parseInt(req.params.customerId, 10);
@@ -123,7 +118,6 @@ app.get('/api/accounts/:customerId', (req, res) => {
     .split('\n')
     .filter(l => l.trim());
 
-  // Spalten-Header überspringen und Zeilen parsen
   const accounts = lines.slice(1)
     .map(line => {
       const [
@@ -177,7 +171,7 @@ app.post('/api/accounts/:accountNumber/transaction', (req, res) => {
     return cols.join(',');
   });
 
-  // CSV zurückschreiben
+  // rewrite CSV 
   fs.writeFileSync(filePath, [header, ...newRows].join('\n') + '\n', 'utf-8');
 
   if (updatedAccount) {
@@ -187,7 +181,7 @@ app.post('/api/accounts/:accountNumber/transaction', (req, res) => {
   }
 });
 
-  // Kundeninformationen bearbeiten
+  // Edit Customer
 app.put('/api/users/:id', (req, res) => {
   const filePath = path.join(__dirname, 'database', 'users.csv');
   const userId = req.params.id;
@@ -235,7 +229,7 @@ app.post('/api/accounts/:accountNumber/transfer', (req, res) => {
     return res.status(404).json({ success: false, message: 'Accounts CSV nicht gefunden' });
   }
 
-  // CSV laden
+  // load CSV
   const lines = fs.readFileSync(filePath, 'utf-8')
     .split('\n').filter(l => l.trim());
   const header = lines[0];
