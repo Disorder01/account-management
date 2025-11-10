@@ -1,1 +1,1 @@
-# AccountManagement
+# A minimalist bank account management system developed for training purposes.
